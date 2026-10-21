@@ -90,7 +90,7 @@ h2{font-size:clamp(30px,3.6vw,44px);line-height:1.1;letter-spacing:-.02em;margin
 .sec-head{max-width:680px;margin-bottom:44px}
 .sec-head p{color:var(--muted);font-size:18px;margin:0}
 
-.apps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
 .app{background:#fff;border:1px solid var(--line);border-radius:22px;padding:26px;display:flex;flex-direction:column;transition:transform .2s, box-shadow .2s}
 .app:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
 .app-ico{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-size:28px;margin-bottom:18px}
@@ -490,6 +490,14 @@ const APPS = [
     url: "https://anibalrossia-spec.github.io/flor-del-ceibo/",
     desc: "Catálogo de congelados con pedidos que llegan listos para preparar.",
     puntos: ["Catálogo con fotos y precios", "Pedido armado en pocos toques", "Gestor de productos y precios"]
+  },
+  {
+    nombre: "RedPro",
+    rubro: "Comercios · Proveedores",
+    icono: "🤝", color: "#FFF1CC",
+    url: "https://redpro.ar/",
+    desc: "Red que conecta comerciantes con proveedores verificados de todo el país.",
+    puntos: ["Buscá proveedores por rubro y zona", "Contacto directo y usuarios con CUIT verificado", "Plan gratis y plan Destacado para proveedores"]
   }
 ];
 
@@ -498,7 +506,7 @@ const RUBROS = [
   { id:"gastronomia", nombre:"Negocios gastronómicos", emoji:"🍔", fondo:"linear-gradient(135deg,#EFE6FA,#FFE2CF)", device:"tab", iconos:["☕","🥐","🍔","🍕","🥗","🍰","🍺","🧃"],
     lista:["Restaurantes","Cafés","Bares","Comida rápida","Licorerías","Panaderías"], app:"Socios Café" },
   { id:"comercio", nombre:"Comercios", emoji:"👗", fondo:"linear-gradient(135deg,#FFE2CF,#FFF1CC)", device:"ph", iconos:["👕","👟","🎁","🪴"],
-    lista:["Tiendas de ropa","Artículos para el hogar","Tiendas de accesorios","Tiendas de regalos","Jardinería","Tiendas de zapatos"], app:"" },
+    lista:["Tiendas de ropa","Artículos para el hogar","Tiendas de accesorios","Tiendas de regalos","Jardinería","Tiendas de zapatos"], app:"RedPro" },
   { id:"servicios", nombre:"Servicios", emoji:"✂️", fondo:"linear-gradient(135deg,#E3F1EA,#EFE6FA)", device:"tab", iconos:["✂️","💅","🧴","🩺","🔧","🐾","🧹","📅"],
     lista:["Servicios profesionales","Servicios de limpieza","Servicios de salud","Belleza y estética","Talleres y automotriz","Veterinaria"], app:"Peluquerías" },
   { id:"mercados", nombre:"Mercados", emoji:"🥕", fondo:"linear-gradient(135deg,#FFF1CC,#E3F1EA)", device:"ph", iconos:["🍓","🥦","🧀","🥩"],
