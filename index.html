@@ -514,7 +514,7 @@ const RUBROS = [
 ];
 
 /* Planes: precio mensual base en USD; los períodos aplican el descuento indicado */
-const MONEDA = "USD";
+let MONEDA = "USD";
 const PERIODOS = [
   { id:"mes",  nombre:"Mensual",    meses:1,  desc:0 },
   { id:"tri",  nombre:"Trimestral", meses:3,  desc:10 },
@@ -524,9 +524,9 @@ const FUNCIONES = ["Soporte especializado","Registro de ventas","Registro de gas
   "Descarga de comprobantes","Descarga de reportes","Gestión de clientes","Gestión de proveedores","Variación de productos","Control de deudas",
   "Creación de recetas","Uso desde el celular","Uso desde la computadora","Documento electrónico"];
 const PLANES = [
-  { nombre:"Esencial (App)", icono:"📱", base:9.99, recomendado:false,
+  { id:"esencial", nombre:"Esencial (App)", icono:"📱", base:9.99, recomendado:false,
     no:["Creación de recetas","Uso desde la computadora","Documento electrónico"] },
-  { nombre:"Pro (App + Web)", icono:"💻", base:19.99, recomendado:true, cinta:"Recomendado para emprendedores",
+  { id:"pro", nombre:"Pro (App + Web)", icono:"💻", base:19.99, recomendado:true, cinta:"Recomendado para emprendedores",
     no:["Documento electrónico"] }
 ];
 
@@ -605,6 +605,20 @@ function renderPlanes(){
   document.querySelectorAll("[data-plan]").forEach(b => b.onclick = () => { $("#plan").value = b.dataset.plan; });
 }
 renderPlanes();
+/* Precios vigentes: son los mismos que muestran las apps (soporte los cambia desde "Precios y links de pago") */
+(function(){
+  const u = "https://firestore.googleapis.com/v1/projects/socio-cafe/databases/(default)/documents/config/planes";
+  const val = v => v == null ? undefined : ("doubleValue" in v) ? Number(v.doubleValue) : ("integerValue" in v) ? Number(v.integerValue)
+    : ("stringValue" in v) ? v.stringValue : ("mapValue" in v) ? Object.fromEntries(Object.entries(v.mapValue.fields || {}).map(([k, x]) => [k, val(x)])) : undefined;
+  fetch(u).then(r => r.ok ? r.json() : null).then(d => {
+    if (!d || !d.fields) return;
+    const c = val({ mapValue: { fields: d.fields } });
+    if (c.moneda) MONEDA = String(c.moneda);
+    PLANES.forEach(p => { const o = (c.planes || {})[p.id]; if (o && o.base > 0) p.base = o.base; });
+    PERIODOS.forEach(p => { const o = (c.periodos || {})[p.id]; if (o && o.desc != null && p.meses > 1) p.desc = o.desc; });
+    renderPlanes();
+  }).catch(() => {});
+})();
 
 $("#foot-apps").insertAdjacentHTML("beforeend",
   APPS.map(a => `<a href="${encodeURI(a.url)}" target="_blank" rel="noopener">${esc(a.nombre)}</a>`).join(""));
