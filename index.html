@@ -513,8 +513,8 @@ const RUBROS = [
     lista:["Minimercados","Mercados","Tiendas de barrio","Fiambrerías","Frutas y verduras","Distribuidor mayorista"], app:"Flor del Ceibo" }
 ];
 
-/* Planes: precio mensual base en USD; los períodos aplican el descuento indicado */
-let MONEDA = "USD";
+/* Planes: precio mensual base en pesos; los períodos aplican el descuento indicado */
+let MONEDA = "ARS";
 const PERIODOS = [
   { id:"mes",  nombre:"Mensual",    meses:1,  desc:0 },
   { id:"tri",  nombre:"Trimestral", meses:3,  desc:10 },
@@ -524,9 +524,9 @@ const FUNCIONES = ["Soporte especializado","Registro de ventas","Registro de gas
   "Descarga de comprobantes","Descarga de reportes","Gestión de clientes","Gestión de proveedores","Variación de productos","Control de deudas",
   "Creación de recetas","Uso desde el celular","Uso desde la computadora","Documento electrónico"];
 const PLANES = [
-  { id:"esencial", nombre:"Esencial (App)", icono:"📱", base:9.99, recomendado:false,
+  { id:"esencial", nombre:"Esencial (App)", icono:"📱", base:15600, recomendado:false,
     no:["Creación de recetas","Uso desde la computadora","Documento electrónico"] },
-  { id:"pro", nombre:"Pro (App + Web)", icono:"💻", base:19.99, recomendado:true, cinta:"Recomendado para emprendedores",
+  { id:"pro", nombre:"Pro (App + Web)", icono:"💻", base:31200, recomendado:true, cinta:"Recomendado para emprendedores",
     no:["Documento electrónico"] }
 ];
 
@@ -582,7 +582,8 @@ $("#rubros-grid").innerHTML = RUBROS.map(r => {
 }).join("");
 
 let periodo = "anio";
-const fmt = n => n.toLocaleString("es-AR", { minimumFractionDigits:2, maximumFractionDigits:2 });
+const fmt = n => { const d = MONEDA === "ARS" ? 0 : 2; return (Math.round(n * (d ? 100 : 1)) / (d ? 100 : 1)).toLocaleString("es-AR", { minimumFractionDigits:d, maximumFractionDigits:d }); };
+const perMes = () => MONEDA === "ARS" ? "/mes" : MONEDA + "/mes";
 function renderPlanes(){
   const p = PERIODOS.find(x => x.id === periodo);
   $("#billing").innerHTML = PERIODOS.map(x => `<button type="button" role="tab" data-p="${x.id}" class="${x.id===periodo?"on":""}" aria-selected="${x.id===periodo}">${x.nombre}${x.desc?`<span class="off">-${x.desc}%</span>`:""}</button>`).join("");
@@ -593,8 +594,8 @@ function renderPlanes(){
       ${pl.cinta ? `<div class="ribbon">${esc(pl.cinta)}</div>` : ""}
       <div class="in">
         <h3><span>${pl.icono}</span>${esc(pl.nombre)}</h3>
-        <div class="was">${p.desc ? `$ ${fmt(pl.base)} ${MONEDA}/mes` : ""}</div>
-        <div class="now">$ ${fmt(mes)} <small>${MONEDA}/mes</small></div>
+        <div class="was">${p.desc ? `$ ${fmt(pl.base)} ${perMes()}` : ""}</div>
+        <div class="now">$ ${fmt(mes)} <small>${perMes()}</small></div>
         <div class="tot">${p.meses>1 ? `Total a pagar por ${p.meses===12?"año":"trimestre"}: $ ${fmt(mes*p.meses)}` : "Se cobra mes a mes"}</div>
         <ul>${FUNCIONES.map(f => pl.no.includes(f) ? `<li class="no">No incluye ${f.charAt(0).toLowerCase()+f.slice(1)}</li>` : `<li>${esc(f)}</li>`).join("")}</ul>
         <a class="btn ${pl.recomendado?"btn-accent":"btn-dark"}" href="#contacto" data-plan="${esc(pl.nombre)}">Elegir plan</a>
