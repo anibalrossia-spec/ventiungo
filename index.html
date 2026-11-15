@@ -609,7 +609,6 @@ $("#rubros-grid").innerHTML = RUBROS.map(r => {
         <ul>${r.lista.map(l => `<li>${esc(l)}</li>`).join("")}</ul>
       </div>
     </article>
-    <a class="btn btn-dark" href="${href}"${tgt}>${app ? "Conocé más ↗" : "Consultanos ↗"}</a>
   </div>`;
 }).join("");
 
